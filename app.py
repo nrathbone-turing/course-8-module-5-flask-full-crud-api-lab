@@ -17,16 +17,18 @@ events = [
     Event(2, "Python Workshop")
 ]
 
-# TODO: Task 1 - Define the Problem
 # Create a new event from JSON input
 @app.route("/events", methods=["POST"])
 def create_event():
-    # TODO: Task 2 - Design and Develop the Code
+    data = request.get_json(silent=True) or {}
+    title = data.get("title")
+    if not title:
+        return jsonify({"error": "title is required"}), 400
 
-    # TODO: Task 3 - Implement the Loop and Process Each Element
-
-    # TODO: Task 4 - Return and Handle Results
-    pass
+    next_id = (max((e.id for e in events), default=0) + 1)
+    new_event = Event(next_id, title)
+    events.append(new_event)
+    return jsonify(new_event.to_dict()), 201
 
 # TODO: Task 1 - Define the Problem
 # Update the title of an existing event
